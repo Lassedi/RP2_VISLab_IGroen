@@ -1,0 +1,98 @@
+function [xlabel, x_interval, data_elect] = prepare_rf_data(input_data, trial_str, events, t)
+
+
+%{
+%% Prepare individual trial Plotting
+
+%prepare data
+trial_ind_VerLR = contains (events.trial_name, 'VERTICAL-L-R');
+
+
+% loop find(trial_VerLR(28+1:end), 1)
+
+trial_ind_VerLR(29:end) = 0;
+
+data_VerLR = Oc18_pRF_act(t>=0,trial_ind_VerLR);
+data_VerLR = reshape(data_VerLR,[], 1);
+%}
+
+%% Prepare AVG Plotting
+%find the trial_names that match the input string ie trial_str and see, 
+% how many unique versions there are (EG.VERTICAL bar moved 28x accross the screen)
+unique_trial_names = unique(events.trial_name);
+
+% checks for diagonal strings because these where shown from different
+% directions so you have the same stimuli in a certain position but named
+% differently because it is comming fromt the other direction - therefore
+% two input strings are passed. It is doing the same as the else-statement
+% but indexing both directions and then taking the mean over that array
+% also column wise.
+if length(trial_str) == 2
+    trial_ind_uniq = contains(unique_trial_names, trial_str(1));
+    unique_trial_names = unique_trial_names(trial_ind_uniq);
+    
+    match_direction = sort(1:length(unique_trial_names), "descend"); 
+    data_elect = zeros(512,length(unique_trial_names));
+    xlabel = cell(length(unique_trial_names),1);
+    for trial_numb = 1:length(unique_trial_names)
+        
+        xlabel{trial_numb} = [trial_str(1), compose('%i',trial_numb), "Avg both directions"];
+        trial_ind1 = ismember(events.trial_name, ...
+            sprintf("%s-%i", trial_str(1), trial_numb));
+        trial_ind2 = ismember(events.trial_name, sprintf("%s-%i", trial_str(2), ...
+            match_direction(trial_numb)));
+        data1 = input_data(t>=0, trial_ind1);
+        data2 = input_data(t>=0, trial_ind2);
+        data_mean = mean([data1,data2], 2);
+        data_elect(:,trial_numb) = data_mean;
+        
+        x = size([data1, data2]);
+        fprintf("\nNumber of matches: %i\nAvg both directions\n", x(2));
+        fprintf("Match:\n%s-%i\n", trial_str(1), trial_numb)
+        fprintf("%s-%i\n", trial_str(2), match_direction(trial_numb))
+    end
+else
+    trial_ind_uniq = contains(unique_trial_names, trial_str);
+    unique_trial_names = unique_trial_names(trial_ind_uniq);
+
+    %use the information to make a xaxis label vector within the forloop
+    xlabel = cell(length(unique_trial_names), 1);
+    %the forloop indexes all datapoints which match the unqiue trial_name and
+    %takes the mean of the multiple matches column-wise producing a 
+    % 512xunique_trial_names data array of means
+    data_elect = zeros(512,length(unique_trial_names));
+    for trial_numb = 1:length(unique_trial_names)
+        
+        fprintf('\n%s-%i',trial_str, trial_numb)
+        
+        xlabel{trial_numb} = sprintf('%s-%i',trial_str, trial_numb);
+        trial_ind = ismember(events.trial_name, sprintf('%s-%i',trial_str, trial_numb));
+        disp(length(trial_ind))
+        disp(size(input_data))
+        %contains(events.trial_name, sprintf('%s-%i',trial_str, trial_numb));
+        data_mean = input_data(t>=0, trial_ind);
+        data_mean = mean(data_mean, 2);
+        data_elect(:,trial_numb) = data_mean;
+        
+        fprintf('\nNumber of matches: %i', sum(trial_ind))
+    end
+end
+
+%disp(size(data_elect))
+
+%reshape the array for plotting
+data_elect = reshape(data_elect,[], 1);
+
+%% prepare the x-axis label vector
+x_interval = zeros(length(data_elect),1);
+x_interval(1) = 1;
+counter = 0;
+for x = 1:length(x_interval)
+    counter = counter + 1;
+    %disp(counter)
+    if counter == 513
+        counter =0;
+        x_interval(x) = x;
+    end
+end
+x_interval(x_interval==0) = [];

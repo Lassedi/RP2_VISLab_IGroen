@@ -1,0 +1,75 @@
+%% Load a dataset
+
+% Note: you will need to update this path to where you copy the data
+dataDir = '~/Documents/ECoG_PRF_categories/data';
+
+% Pick a subject
+subject = 'p02';
+loadName = fullfile(dataDir, 'derivatives','ECoGPreprocessed', sprintf('sub-%s_prfcatdata.mat', subject));
+load(loadName);
+%% select data for the specific electrode and pRF trials only
+electrode = "Oc18";
+Oc18_pRF_act = epochs(:,events.task_name == "prf",electrodes.name == "Oc18");
+
+%% Plot everything
+figure();
+hold on;
+
+t = tiledlayout(2,2);
+title(t, sprintf("%s - Average response pRF stimuli", electrode));
+nexttile
+%prepare data
+[xlabel, x_interval, data_VerLR] = prepare_rf_data(Oc18_pRF_act, "VERTICAL-L-R", events, t);
+
+plot(data_VerLR, "LineWidth",1)
+
+% xlabel_time = events.onset(trial_ind_VerLR) - events.onset(1); dont think
+% i need this
+xticks(x_interval);
+xticklabels(xlabel);
+ax = gca();
+ax.XLim = [0, length(data_VerLR)];
+
+%diagonal 
+t.nexttile
+[xlabel, x_interval, data_VerLR] = prepare_rf_data(Oc18_pRF_act, ...
+    ["DIAGONAL-LD-RU","DIAGONAL-RU-LD"] , events, t);
+
+plot(data_VerLR, "LineWidth",1)
+
+xticks(x_interval);
+%xticklabels(xlabel);
+xlabel = strtrim(sprintf('\\newline%s%s\\newline%s\n',xlabel{:}));
+ax = gca();
+ax.XLim = [0, length(data_VerLR)];
+ax.XTickLabel = xlabel;
+
+
+% Horizontal 
+nexttile
+[xlabel, x_interval, data_VerLR] = prepare_rf_data(Oc18_pRF_act, 'HORIZONTAL-U-D', events, t);
+
+plot(data_VerLR, "LineWidth",1)
+
+xticks(x_interval);
+xticklabels(xlabel);
+ax = gca();
+ax.XLim = [0, length(data_VerLR)];
+
+% Diagnal 2
+nexttile
+[xlabel, x_interval, data_VerLR] = prepare_rf_data(Oc18_pRF_act, ...
+    ["DIAGONAL-LU-RD","DIAGONAL-RD-LU"] , events, t);
+
+plot(data_VerLR, "LineWidth",1)
+
+xticks(x_interval);
+xlabel = sprintf('\\newline%s%s\\newline%s\n',xlabel{:});
+ax = gca();
+ax.XLim = [0, length(data_VerLR)];
+ax.XTickLabel = xlabel;
+
+
+
+
+
