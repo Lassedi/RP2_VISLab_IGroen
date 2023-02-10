@@ -4,7 +4,7 @@
 dataDir = '~/Documents/ECoG_PRF_categories/data';
 
 % Pick a subject
-subject = 'p10';
+subject = 'p05';
 loadName = fullfile(dataDir, 'derivatives','ECoGPreprocessed', sprintf('sub-%s_prfcatdata.mat', subject));
 load(loadName);
 %% select data for the specific electrode and pRF trials only
