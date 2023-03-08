@@ -34,7 +34,7 @@ end
 %%
 % Prepare the plot
 
-figure("Visible","off");hold on;
+figure("Visible","on");hold on;
 
 %count loop iterations
 counter = 1;
@@ -44,7 +44,7 @@ for cc = 1:height(chan_ind)
     
     if counter > 4
         counter = 1;
-        figure("Visible","off");hold on;
+        figure("Visible","on");hold on;
     end
     chan = table2array(chan_ind(cc,1)); 
     trial_ind1 = contains(events.trial_name, 'HOUSE');

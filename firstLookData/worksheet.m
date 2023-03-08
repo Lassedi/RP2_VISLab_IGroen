@@ -6,7 +6,7 @@ tbUse ECoG_utils;
 dataDir = '~/Documents/ECoG_PRF_categories/data';
 
 % Pick a subject
-subject = 'p02';
+subject = 'p10';
 loadName = fullfile(dataDir, 'derivatives','ECoGPreprocessed', sprintf('sub-%s_prfcatdata.mat', subject));
 load(loadName);
 
@@ -18,10 +18,10 @@ bidsEcogPlotElectrodesOnMesh(dataDir, subject, session, 'smry_wang15_mplbl',[], 
 
 %% Find all channels above a certain threshold for all subjects and plot the
 %epoch values
-close all
+%close all
 thresh = 1;
 
-for sub = ["p01", "p02", "p05", "p06", "p07", "p08", "p09", "p10", "p11"]
+for sub = ["p10"] %, "p02", "p05", "p06", "p07", "p08", "p09", "p10", "p11"]
     os_elect_resp(thresh,sub)
 end
 %%

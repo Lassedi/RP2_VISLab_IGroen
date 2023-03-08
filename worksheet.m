@@ -6,7 +6,7 @@ tbUse ECoG_utils;
 dataDir = '~/Documents/ECoG_PRF_categories/data';
 
 %% Pick a subject
-subject = 'p07';
+subject = 'p05';
 loadName = fullfile(dataDir, 'derivatives','ECoGPreprocessed', sprintf('sub-%s_prfcatdata.mat', subject));
 load(loadName);
 
