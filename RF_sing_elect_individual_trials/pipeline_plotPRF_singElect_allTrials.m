@@ -4,14 +4,15 @@
 dataDir = '~/Documents/ECoG_PRF_categories/data';
 
 % Pick a subject
-subject = 'p05';
+subject = 'p01';
 loadName = fullfile(dataDir, 'derivatives','ECoGPreprocessed', sprintf('sub-%s_prfcatdata.mat', subject));
 load(loadName);
 %% select data for the specific electrode and pRF trials only
-electrode = "Oc13";
+electrode = "OT01";
 elect_pRF_act = epochs(:,:,electrodes.name == electrode); 
 %% Plot individual trials including blanks
-plot_ind_trials(elect_pRF_act, events, electrode, t)
+modelts = generatemodelts( )
+plot_ind_trials(elect_pRF_act, events, electrode, t, modelts)
 %% Plot average over single trials not including blanks
 figure();
 hold on;

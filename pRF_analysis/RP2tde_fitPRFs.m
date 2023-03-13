@@ -94,7 +94,7 @@ for ii = 1:nSubjects
                 f_ind = checkForHDgrid(channels);
 
                 % Timeseries + fits
-                ecog_plotPRFtsfits(data2fit, stimulus, results, channels);
+                RP2ecog_plotPRFtsfits(data2fit, stimulus, results, channels);
                 for f = 1:length(f_ind)
                     if length(f_ind) == 1
                         figureName = sprintf('%s_prftimecoursefits', subject);
@@ -110,7 +110,7 @@ for ii = 1:nSubjects
                 
                 % PRFs
                 coloropt = 0;
-                ecog_plotPRFs(results, stimulus, channels, [], [], coloropt)  
+                RP2ecog_plotPRFs(results, stimulus, channels, [], [], coloropt)  
                 for f = 1:length(f_ind)
                     if length(f_ind) == 1
                         figureName = sprintf('%s_prfs', subject);

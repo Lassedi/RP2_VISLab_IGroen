@@ -1,6 +1,7 @@
+addpath(genpath("."))
 %% 1: Preparing Dataset
 dataDir = '~/Documents/ECoG_PRF_categories/data';
-sub_list = ["p01", "p02", "p05", "p06", "p07", "p08", "p09", "p10","p11"];
+sub_list = ["p01"]%, "p02", "p05", "p06", "p07", "p08", "p09", "p10","p11"];
 
 data = prep_data(sub_list, dataDir);
 
@@ -21,7 +22,7 @@ addpath(genpath("/home/lasse/Documents/ECoG_PRF_categories/matlab_code/"))
 tr              = 1;
 opt.hrf         = 1;
 opt.maxpolydeg  = 0;
-opt.xvalmode    = 0; 
+opt.xvalmode    = 2; 
 opt.forcebounds = 1;
 opt.display     = 'off';
 

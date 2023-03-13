@@ -4,8 +4,7 @@ function data = prep_data(sub_list, dataDir)
 %% loop through all subjects and put them into a cell array of data
 % structures expected in RP2tde_computePRF
 data = cell(length(sub_list), 1);
-cd /home/lasse/Documents/ECoG_PRF_categories/matlab_code/pRF_analysis/
-miss_da = 0;
+
 events = 0; %pre-specify because of error otherwise
 
 for subn = 1:length(sub_list)

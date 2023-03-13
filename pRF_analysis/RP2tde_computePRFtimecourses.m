@@ -1,6 +1,6 @@
 function [data] = RP2tde_computePRFtimecourses(data, time_win, normalizeEpochs)
 
-cd /home/lasse/Documents/ECoG_PRF_categories/matlab_code/temporalECoG/
+addpath('/home/lasse/Documents/ECoG_PRF_categories/matlab_code/temporalECoG/')
 
 % Computes prf timecourses for data to be fitted with analyzePRF
 % [data2fit] = tde_computePRFs(recomputeData, doPlots, saveDir, resultsStr) 

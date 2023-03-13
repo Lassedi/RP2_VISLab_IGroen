@@ -1,7 +1,7 @@
 function plot_prf_elect(subject, thresh)
 %% Load a dataset
 
-% Note: you will need to update this path to where you copy the data
+% Note: you will need to update this path to where you store the data
 dataDir = '~/Documents/ECoG_PRF_categories/data';
 
 % Pick a subject

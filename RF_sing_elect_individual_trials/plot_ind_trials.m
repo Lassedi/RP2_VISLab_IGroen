@@ -1,5 +1,5 @@
-function plot_ind_trials(input_data, events, electrode, t)
-
+function plot_ind_trials(input_data, events, electrode, t, modelts, results, el)
+%plot responses to all trials inlcuding blanks per run
 events = events(events.task_name == "prf", :);
 
 ind_numb = [1,224];
@@ -10,7 +10,7 @@ size_events = size(events);
 figure();
 hold on;
 
-title(sprintf("%s - Trial-response to individual pRF stimuli", electrode));
+
 xlabel = events.trial_name(ind_numb(1):ind_numb(2));
 
 %disp(length(xlabel(1:3:end)))
@@ -27,8 +27,8 @@ legend_labels = [];
 
 %forloop plot
 for run_n = 1:(size_events(1)/224)
-disp(run_n)
-disp(ind_numb(1))
+%disp(run_n)
+%disp(ind_numb(1))
 
 
 data = input_data(t>time_win(1) & t<time_win(2),ind_numb(1):ind_numb(2));
@@ -45,6 +45,18 @@ ax = gca();
 ax.XLim = [-5, length(data)];
 
 legend_labels{run_n} = sprintf("Run: %i", run_n);
+end
+
+if exist("modelts", "var")
+    title(sprintf("Participant: %s - Channel: %s - Trial-response to " + ...
+        "individual pRF stimuli & Model prediction - R2: %0.1f", ...
+        results.subject, electrode, results.xval(el)));
+
+    legend_labels{end + 1} = "Model";
+    plot(modelts{1},LineStyle="-.", LineWidth=2.5, Color="black")
+else
+    title(sprintf("%s - Trial-response to individual pRF stimuli", ...
+    electrode));
 end
 
 legend(legend_labels);
