@@ -1,4 +1,4 @@
-function [out] = RP2tde_fitPRFs(data, bar_apertures, opt, doPlots, saveDir, resultsStr, plotSaveDir)
+function [out] = RP2tde_fitPRFs(data, bar_apertures, opt, doPlots, saveDir, resultsStr, plotSaveDir, indv)
 
 % Fits a pRF model to PRF time series using a modified version of Kendrick
 % Kay's analyzePRF.m, created by Ken Yuasa (see
@@ -58,11 +58,23 @@ for ii = 1:nSubjects
 %                 data2fit{jj} = data{ii}.ts(:,:,jj);
 %                 stimulus{jj} = double(bar_apertures(:,:,stim_inx));
 %             end
-%             
-            data2fit = mean(data{ii}.ts,3);
-            stimulus = {bar_apertures(:,:,data{ii}.stim_inx)};
-            disp(size(data2fit))
-            disp(size(stimulus))
+%           
+            if indv
+                data2fit = cell(1,size(data{ii}.ts, 3));
+                stimulus = cell(1, size(data{ii}.ts,3));
+                %disp(data2fit)
+                for nrun = 1:size(data{ii}.ts,3)
+                    data2fit{nrun} = data{ii}.ts(:,:,nrun);
+                    stimulus{nrun} = bar_apertures;
+                end
+
+            else
+                data2fit = mean(data{ii}.ts,3);
+                stimulus = {bar_apertures(:,:,data{ii}.stim_inx)};
+
+            end
+            %disp(size(data2fit))
+            %disp(size(stimulus))
             %results = analyzePRF_bounds(stimulus, data2fit, tr, opt);
             results = analyzePRFdog(stimulus, data2fit, tr, opt);
             results.channels = channels;
@@ -91,38 +103,25 @@ for ii = 1:nSubjects
             if doPlots
                 close all;
                 channels = data{ii}.channels;
-                f_ind = checkForHDgrid(channels);
 
                 % Timeseries + fits
                 RP2ecog_plotPRFtsfits(data2fit, stimulus, results, channels);
-                for f = 1:length(f_ind)
-                    if length(f_ind) == 1
-                        figureName = sprintf('%s_prftimecoursefits', subject);
-                    else
-                       figureName = sprintf('%s_prftimecoursefits_%d', subject, f);
-                    end                
-                    set(f, 'Name', figureName);
-                    set(f, 'Position', get(0,'screensize'));
-                    set(findall(f,'-property','FontSize'),'FontSize',14)
-                    saveas(f, fullfile(plotSaveDir, figureName), 'png'); 
+                filename = {length(findobj("type", "figure"))};
+                for f = 1:length(filename)
+                    filename{f} = sprintf("prfTs_%i", f); 
                 end
-                close all;
+                saveplots(saveDir, "prfTS_allElect", subject, filename);
+                close all
                 
                 % PRFs
                 coloropt = 0;
-                RP2ecog_plotPRFs(results, stimulus, channels, [], [], coloropt)  
-                for f = 1:length(f_ind)
-                    if length(f_ind) == 1
-                        figureName = sprintf('%s_prfs', subject);
-                    else
-                        figureName = sprintf('%s_prfs_%d', subject, f);
-                    end                
-                    set(f, 'Name', figureName);
-                    set(f, 'Position', get(0,'screensize'));
-                    set(findall(f,'-property','FontSize'),'FontSize',14)
-                    saveas(f, fullfile(plotSaveDir, figureName), 'png'); 
+                RP2ecog_plotPRFs(results, stimulus, channels, [], coloropt, [])
+                filename = {length(findobj("type", "figure"))};
+                for f = 1:length(filename)
+                    filename{f} = sprintf("prfs_%i", f); 
                 end
-                close all;
+                saveplots(saveDir, "prf_all elect", subject, filename);
+                close all
             end
         end
     end

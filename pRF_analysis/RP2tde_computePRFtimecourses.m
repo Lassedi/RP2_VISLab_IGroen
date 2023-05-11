@@ -50,7 +50,8 @@ for ii = 1:nSubjects
         %commeted out because missing trials were substituted by 0s -
         %because of error with reshape in line 91
         %{
-        case 'p01' 
+        case 'p01' %this was not used because it led to an error - instead
+        %beforehand missing trials are replaced with 0
             % in this subject, trigger 41 was not sent because it was the
             % same as used for the blank (stimulus coding error).
             stimInx = setdiff(1:224, 41);
@@ -76,13 +77,14 @@ for ii = 1:nSubjects
        
     % Normalize epochs, within run?
     if normalizeEpochs
+        disp("normalizing...")
         run_indices = []; 
         for jj = 1:nRuns
             run_indices = [run_indices; ones(nStim,1)*jj];
         end
-        [epochs] = ecog_normalizeEpochs(epochs, t, [], [], run_indices);
+        [epochs] = RP2ecog_normalizeEpochs(epochs, t, [-0.1 0], [], run_indices);
     end
-    
+
     % Compute average broadband response in time window
     trials = squeeze(mean(epochs(t>time_win(1) & t<time_win(2),:,:),1)); 
 

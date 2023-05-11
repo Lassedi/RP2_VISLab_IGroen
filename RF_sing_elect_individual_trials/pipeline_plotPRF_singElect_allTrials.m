@@ -11,7 +11,7 @@ load(loadName);
 electrode = "OT01";
 elect_pRF_act = epochs(:,:,electrodes.name == electrode); 
 %% Plot individual trials including blanks
-modelts = generatemodelts( )
+modelts = generatemodelts(); % needs addpath(genpath()) - is in prf_analysis
 plot_ind_trials(elect_pRF_act, events, electrode, t, modelts)
 %% Plot average over single trials not including blanks
 figure();

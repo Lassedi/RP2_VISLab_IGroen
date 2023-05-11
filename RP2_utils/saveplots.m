@@ -21,5 +21,4 @@ for f = 1:fig_count
     set(f, "Name", file_name{f})
     set(f, 'Position', get(0,'screensize'))
     saveas(f, fullfile(saveDir, file_name{f}), "png")
-    close
 end

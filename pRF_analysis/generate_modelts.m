@@ -21,8 +21,9 @@ for cc=1:length(stimulus)
   stimulusPP{cc} = squish(stimulus{cc},2)';  % this flattens the image so that the dimensionality is now frames x pixels
   stimulusPP{cc} = [stimulusPP{cc} cc*ones(size(stimulusPP{cc},1),1)];  % this adds a dummy column to indicate run breaks
 end
-disp(el)
-%
+
+%disp(el)
+
 % Define the model function.  This function takes parameters and stimuli as input and
 % returns a predicted time-series as output.  Specifically, the variable <pp> is a vector
 % of parameter values (1 x 5) and the variable <dd> is a matrix with the stimuli (frames x pixels).

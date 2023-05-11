@@ -1,8 +1,4 @@
-function RP2ecog_plotPRFtsfits(data, stimulus, results, channels, chan_ind)
-
-if ~exist('chan_ind', 'var') || isempty(chan_ind)
-    chan_ind = 1:height(channels);
-end
+function RP2ecog_plotPRFtsfitsINDV(data, stimulus, results, channels, chan_list)
 
 % Plot PRF timecourses data and fits
 % Using example code from Kendrick Kays website
@@ -43,44 +39,40 @@ for cc=1:length(degs)
   polymatrix{cc} = projectionmatrix(constructpolynomialmatrix(size(data{cc},2),0:degs(cc)));
 end
 
-f_ind = checkForHDgrid(channels);
 
-for f = 1:length(f_ind)
+
+
+figure; hold on
+plotDim1 = round(sqrt(length(chan_list))); plotDim2 = ceil((length(chan_list))/plotDim1);
+
+for ii  = 1:length(chan_list)
     
-    figure; hold on
-    chan_ind = f_ind{f};
-    nChans = length(chan_ind);
+    chan_ind = strcmp(results.channels.name, chan_list{ii});
+    
+    el = find(chan_ind);
 
-    plotDim1 = round(sqrt(nChans)); plotDim2 = ceil((nChans)/plotDim1);
-
-
-    for ii  = 1:nChans
-
-        el = chan_ind(ii);
-
-        subplot(plotDim1,plotDim2,ii); hold on
-        plotTitle = sprintf('%s-R2:%0.1f', channels.name{el}, results.xval(el));%,channels.benson14_varea{el}, channels.wang15_mplbl{el});        
-        % For each run, collect the data and the model fit.  We project out polynomials
-        % from both the data and the model fit.  This deals with the problem of
-        % slow trends in the data.
-       
-        datats = {};
-        modelts = {};
-        for cc=1:length(data)
-          datats{cc} =  polymatrix{cc}*data{cc}(el,:)';
-          modelts{cc} = polymatrix{cc}*modelfun(results.params(1,:,el),stimulusPP{cc});
-        end
-
-        set(gcf,'Units','points');
-        plot(cat(1,datats{:}),'k-', 'LineWidth', 2);
-        plot(cat(1,modelts{:}),'r-','LineWidth', 2);
-        if el == 1, legend('Data', 'Model prediction'); end
-        %if el == 1, xlabel('PRF stimulus'); ylabel('Broadband response');end
-        set(gca, 'FontSize', 14)
-        set(gca, 'XTickLabel', []);
-        title(plotTitle);
-        axis tight
-        setsubplotaxes();
+    subplot(plotDim1,plotDim2,ii); hold on
+    plotTitle = sprintf('%s-R2:%0.1f', channels.name{el}, results.xval(el));%,channels.benson14_varea{el}, channels.wang15_mplbl{el});        
+    % For each run, collect the data and the model fit.  We project out polynomials
+    % from both the data and the model fit.  This deals with the problem of
+    % slow trends in the data.
+   
+    datats = {};
+    modelts = {};
+    for cc=1:length(data)
+      datats{cc} =  polymatrix{cc}*data{cc}(el,:)';
+      modelts{cc} = polymatrix{cc}*modelfun(results.params(1,:,el),stimulusPP{cc});
     end
+
+    set(gcf,'Units','points');
+    plot(cat(1,datats{:}),'k-', 'LineWidth', 2);
+    plot(cat(1,modelts{:}),'r-','LineWidth', 2);
+    if el == 1, legend('Data', 'Model prediction'); end
+    %if el == 1, xlabel('PRF stimulus'); ylabel('Broadband response');end
+    set(gca, 'FontSize', 14)
+    set(gca, 'XTickLabel', []);
+    title(plotTitle);
+    axis tight
+    setsubplotaxes();
 end
 end

@@ -23,7 +23,7 @@ for ii = 1:28
     imshow(stimulus.images(:,:,imlist(ii))); 
     axis tight
 end
-%%
+
 figure;hold on
 imlist = 29:41;
 for ii = 1:12 

@@ -1,5 +1,9 @@
-function RP2ecog_plotPRFs(results, stimulus, channels, degPerPix, colorOpt, elect)  
-
+function RP2ecog_plotPRFs(results, stimulus, channels, degPerPix, colorOpt, elect_tbl)  
+if ~isempty(elect_tbl)
+    elect = elect_tbl.Electrode;
+else
+    elect = elect_tbl;
+end
 
 if ~exist('degPerPix', 'var') || isempty(degPerPix)
     % The stimulus is 100 pixels (in both height and weight), and this corresponds to
@@ -25,22 +29,29 @@ channel_names = channels.name;
 for f = 1:length(f_ind)
     %check whether the provided participant has any goood PRF+OS channels
     if isempty(elect)
+
         elect = f_ind{f};
+        %elect = elect - (elect(1) - 1);
         nChans = length(elect);
+        indv = false;
     else
         size_f_ind = size(f_ind{f});
-        elect_ind = ismember(channel_names(1:size_f_ind(size(f_ind{f}) ~= 1)) ...
-        , elect);
+        elect_ind = ismember(channel_names(1:size_f_ind(size_f_ind ~= 1)), elect);
         nChans = sum(elect_ind);
+
         elect_f_ind = channel_names(elect_ind);
-    end
-    
-    %check if no channels match 
-    if nChans == 0
-        break
+        indv = true;
+
+        % delete already checked channel names from channel_names
+        channel_names = channel_names(size_f_ind(size_f_ind~=1)+1:end);
     end
 
-    figure; hold on
+    %check if no channels match 
+    if nChans == 0
+        continue
+    end
+
+    figure(Visible="on"); hold on
 
     
     plotDim1 = round(sqrt(nChans)); plotDim2 = ceil((nChans)/plotDim1);
@@ -48,16 +59,23 @@ for f = 1:length(f_ind)
     for ii = 1:nChans
         %nexttile
         if isnumeric(elect)
-            %chan_ind = elect{1};
-            chan_ind = elect(ii);
-            el = f_ind{f}(chan_ind.');
+            %chan_ind = 
+            el = elect(ii);
+            %chan_ind = elect(ii);
+            %el = find(f_ind{f} ?chan_ind, "first");
+            %disp(el)
+            plotTitle = sprintf('%s R2 %0.1f', channels.name{el}, mean(results.xR2(el,:)));
         else
             chan_ind =  elect_f_ind{ii};
             el = find(strcmp(channels.name, chan_ind));
+            selectivity = elect_tbl(strcmp(elect_tbl.Electrode,channels.name{el}), "Selectivity");
+             plotTitle = sprintf("%s R2:%0.1f %s (d':%0.1f)", channels.name{el},...
+            mean(results.xR2(el, :)), selectivity{:,1}{1},...
+            table2array(elect_tbl(strcmp(elect_tbl.Electrode,channels.name{el}), selectivity{:,1}{1}))); %title overlapping with: , results.ecc(el)*degPerPix, round(results.ang(el)       
         end
         
         subplot(plotDim1,plotDim2,ii); 
-        plotTitle = sprintf('%s R2:%0.1f', channels.name{el}, results.xval(el,:)); %title overlapping with: , results.ecc(el)*degPerPix, round(results.ang(el)        
+        
         %plotTitle = sprintf('%s R2=%0.1f e=%0.1f a=%d', channels.name{el}, results.R2(el,:), results.ecc(el)*degPerPix, round(results.ang(el)));        
         %plotTitle = sprintf('%s R2 %0.1f', channels.name{el}, results.R2(el,2));   
         
@@ -106,7 +124,9 @@ for f = 1:length(f_ind)
         set(gca, 'XLim', [stimRes/2 drawRes-stimRes/2],'YLim',[stimRes/2 drawRes-stimRes/2])
         setsubplotaxes();
     end
-    channel_names = channel_names(size(f_ind{f}, 1)+1:end);
+    if ~indv
+        elect = [];
+    end
 end
 
 end

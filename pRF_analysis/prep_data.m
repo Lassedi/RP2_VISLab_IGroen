@@ -11,10 +11,12 @@ for subn = 1:length(sub_list)
     % Pick a subject
     sub = sub_list(subn);
     loadName = fullfile(dataDir, 'derivatives','ECoGPreprocessed', sprintf('sub-%s_prfcatdata.mat', sub));
+    %loadName = fullfile(dataDir, sprintf('sub-%s_prfcatdata.mat', sub));
+
     load(loadName);
     disp(sub)
     
-    %make sure all trials are present
+    % make sure all trials are present
     if floor(size(events(events.task_name == "prf",:),1)/224) ~= ceil( ...
             size(events(events.task_name == "prf",:),1)/224)
         
@@ -30,11 +32,13 @@ for subn = 1:length(sub_list)
         %events file
         control_sub = "p02";
         CtrlloadName = fullfile(dataDir, 'derivatives','ECoGPreprocessed', sprintf('sub-%s_prfcatdata.mat', control_sub));
+        %CtrlloadName = fullfile(dataDir, sprintf('sub-%s_prfcatdata.mat', control_sub));
         load(CtrlloadName);
         contrl_events = events(events.task_name == "prf",:);
         
         %reload subject with missing trial
         loadName = fullfile(dataDir, 'derivatives','ECoGPreprocessed', sprintf('sub-%s_prfcatdata.mat', sub));
+        %CtrlloadName = fullfile(dataDir, sprintf('sub-%s_prfcatdata.mat', control_sub));
         load(loadName);
 
         events_m = events;
