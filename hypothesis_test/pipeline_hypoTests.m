@@ -20,13 +20,13 @@ p_EccRS = ranksum(Ecc_face, Ecc_house);
 RFSize_house = elect_table.RFSize(strcmp(elect_table.Selectivity, "HOUSES"));
 RFSize_face = elect_table.RFSize(strcmp(elect_table.Selectivity, "FACES"));
 
-p_SizePT_mean = permu_test_mean(RFSize_face, RFSize_house, 100000);
+p_SizePT_mean = permu_test_mean(RFSize_face, RFSize_house, 10000);
 
 % Eccentricity
 Ecc_house = elect_table.Eccentricity(strcmp(elect_table.Selectivity, "HOUSES"));
 Ecc_face = elect_table.Eccentricity(strcmp(elect_table.Selectivity, "FACES"));
 
-p_EccPT_mean = permu_test_mean(Ecc_face, Ecc_house, 100000);
+p_EccPT_mean = permu_test_mean(Ecc_face, Ecc_house, 10000);
 
 %% Permutation Test of the Median
 % Receptive field Size
@@ -40,3 +40,7 @@ Ecc_house = elect_table.Eccentricity(strcmp(elect_table.Selectivity, "HOUSES"));
 Ecc_face = elect_table.Eccentricity(strcmp(elect_table.Selectivity, "FACES"));
 
 p_EccPT_median = permu_test_median(Ecc_face, Ecc_house, 100000);
+
+%% Permutation test from matlab file exchange
+p_offEcc_mean = OFF_permutationTest(Ecc_face, Ecc_house, 10000, 'sidedness','smaller');
+p_offRF_mean = OFF_permutationTest(RFSize_face, RFSize_house, 10000, 'sidedness','smaller');
