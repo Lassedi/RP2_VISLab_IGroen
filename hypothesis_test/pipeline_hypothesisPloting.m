@@ -1,8 +1,10 @@
 %load electrode table
 dataDir = '/home/lasse/Documents/ECoG_PRF_categories/Plots/';
-elect_table = readtable(fullfile(dataDir,"1_electSelection_final.xls"));
+elect_table_ori = readtable(fullfile(dataDir,"1_electSelection_final.xls"));
+loc_table = readtable(fullfile(dataDir, "1_locations_final_electrode_selection.xls"));
 saveDir = dataDir;
 %% calculate sumary stats per group 
+elect_table = elect_table_ori(loc_table.HouVFa == 0 | loc_table.HouVFa == 1 | loc_table.oddCases == 1,:);
 sumstats = grpstats(elect_table, "Selectivity",["mean", "std", "median"],"DataVars",["Eccentricity", "RFSize"]);
 
 %% Plot Size - Boxplot

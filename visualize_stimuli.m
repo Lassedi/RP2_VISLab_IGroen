@@ -1,7 +1,14 @@
 % category stimuli
-stimFile = '~/Documents/ECoG_PRF_categories/data/stimuli/sub-p10_ses-nyuecog01_task-spatialobject_acq-clinical_run-01.mat';
+stimFile = '~/Documents/ECoG_PRF_categories/data_A/stimuli/sub-p10_ses-nyuecog01_task-spatialobject_acq-clinical_run-01.mat';
 
 load(stimFile);
+figure; hold on;
+img = [1,13,25];
+for ii = 1:length(img)
+    subplot(1,3,ii)
+    imshow(stimulus.images(:,:, img(ii)))
+end
+%%
 
 figure;hold on
 for ii = 1:size(stimulus.images,3)-1 % 37th stimulus is just a gray screen (blank)
@@ -31,6 +38,7 @@ for ii = 1:12
     imshow(stimulus.images(:,:,imlist(ii))); 
     axis tight
 end
+
 
 figure;hold on
 imlist = 57:85;

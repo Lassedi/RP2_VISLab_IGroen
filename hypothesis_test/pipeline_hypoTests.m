@@ -1,6 +1,8 @@
 %load electrode table
 dataDir = '/home/lasse/Documents/ECoG_PRF_categories/Plots/';
-elect_table = readtable(fullfile(dataDir,"1_electSelection_final.xls"));
+elect_table_ori = readtable(fullfile(dataDir,"1_electSelection_final.xls"));
+loc_table = readtable(fullfile(dataDir, "1_locations_final_electrode_selection.xls"));
+elect_table = elect_table_ori(loc_table.HouVFa == 0 | loc_table.HouVFa == 1 | loc_table.oddCases == 1,:);
 
 %% Wilcoxon rank sum test
 % Receptive Field Size
@@ -43,4 +45,4 @@ p_EccPT_median = permu_test_median(Ecc_face, Ecc_house, 100000);
 
 %% Permutation test from matlab file exchange
 p_offEcc_mean = OFF_permutationTest(Ecc_face, Ecc_house, 10000, 'sidedness','smaller');
-p_offRF_mean = OFF_permutationTest(RFSize_face, RFSize_house, 10000, 'sidedness','smaller');
+p_offRFS_mean = OFF_permutationTest(RFSize_face, RFSize_house, 10000, 'sidedness','smaller');
