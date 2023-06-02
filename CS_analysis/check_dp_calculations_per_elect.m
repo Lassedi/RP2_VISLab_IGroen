@@ -6,8 +6,8 @@ dataDir = '/home/lasse/Documents/ECoG_PRF_categories/data_A/derivatives/ECoGPrep
 % ^old
 prfFitPath = '/home/lasse/Documents/ECoG_PRF_categories/data_A/prf_fits/prf_woNorm_dataA';
 
-addpath(genpath('/home/lasse/Documents/ECoG_PRF_categories/matlab_code'))
-
+%get access to all function and utils
+get_utils()
 %% load data 
 sub_list = ["p02"];%, "p02", "p05", "p06", "p07", "p08", "p09", "p10", "p11", "p12", "p13", "p14"];
 stim = ["FACES", "HOUSES", "BUILDINGS"];
@@ -73,9 +73,9 @@ end
 
 
 vis_check_dp_trial_means_dist(means_trials_f, means_trials_h, el);
-fig_names = [fig_names,{sprintf("%s_midterm", get(gcf,"Name"))}];
+fig_names = [fig_names,{sprintf("%s_midtermHD", get(gcf,"Name"))}];
 %% save plots
 saveDir = '/home/lasse/Documents/ECoG_PRF_categories/Plots';
-saveplots(saveDir, "trialMeansDist_check", subject, fig_names);
+saveplots(saveDir, "trialMeansDist_check", subject, fig_names, true);
 clear fig_names
 close all

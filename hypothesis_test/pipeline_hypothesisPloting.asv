@@ -80,11 +80,8 @@ ecc_f = table2array(elect_table(strcmp(elect_table.Selectivity, sumstats.Selecti
 ecc_h = table2array(elect_table(strcmp(elect_table.Selectivity, sumstats.Selectivity{2}), "Eccentricity"));
 
 %plot(1, ecc_l, "ok")
-a = swarmchart(ones(1, size(ecc_f, 1)), ecc_f', "filled", "MarkerFaceAlpha",0.5);
-b = swarmchart(2*ones(1, size(ecc_h,1)), ecc_h', "filled", "MarkerFaceAlpha",0.5);
-
-a.XJitterWidth = 0.3;
-b.XJitterWidth = 0.3;
+a = swarmplot(ones(1, size(ecc_h, 1)), ecc_f', "filled", "MarkerFaceAlpha",0.5)
+plot(2*ones(1, size(ec, ecc_h, "ok")
 
 %calculate and plot error bars (std error of the mean)
 stderr = sumstats.std_Eccentricity ./ sqrt(sumstats.GroupCount);
@@ -95,14 +92,13 @@ er.LineWidth = 2;
 title("Eccentricity")
 
 pubgraph(f, 10, 0.5,"w", false)
-
-xticks(1:2)
 ax = gca;
 ax.XTickLabels = sumstats.Selectivity;
+hold on
 hold off
 %% save - barplot
 
-file_name = "1_BarEccentricity_AllFinal_midterm";
-saveplots(saveDir, "hypo_plots", "Eccentricity_woOutliers", file_name, true)
+file_name = "1_BarEccentricity_final";
+saveplots(saveDir, "hypo_plots", "Eccentricity_woOutliers", file_name)
 close all
 
