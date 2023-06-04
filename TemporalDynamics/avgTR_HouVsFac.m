@@ -109,24 +109,24 @@ epochs_acrossSubs = get_TtP(epochs_acrossSubs);
 
 %% Plot Time to peak bar plot
 % make a barplot
-Ttp_faces = [epochs_acrossSubs.TtP_faces];
-Ttp_houses = [epochs_acrossSubs.TtP_houses];
+Offset_resp_faces = [epochs_acrossSubs.TtP_faces];
+Offset_resp_houses = [epochs_acrossSubs.TtP_houses];
 
 f = figure(); hold on;
-c = bar([mean(Ttp_faces), mean(Ttp_houses)]);
+c = bar([mean(Offset_resp_faces), mean(Offset_resp_houses)]);
 
 % plot(1, ecc_l, "ok")
-a = swarmchart(ones(1, size(Ttp_faces, 2)), Ttp_faces, "filled", "MarkerFaceAlpha",0.5);
-b = swarmchart(2*ones(1, size(Ttp_houses,2)), Ttp_houses, "filled", "MarkerFaceAlpha",0.5);
+a = swarmchart(ones(1, size(Offset_resp_faces, 2)), Offset_resp_faces, "filled", "MarkerFaceAlpha",0.5);
+b = swarmchart(2*ones(1, size(Offset_resp_houses,2)), Offset_resp_houses, "filled", "MarkerFaceAlpha",0.5);
 
 a.XJitterWidth = 0.3;
 b.XJitterWidth = 0.3;
 
 %calculate and plot error bars (std error of the mean)
-stderr = [std(Ttp_faces / sqrt(length(Ttp_faces)));...
-    std(Ttp_houses) / sqrt(length(Ttp_houses))];
+stderr = [std(Offset_resp_faces / sqrt(length(Offset_resp_faces)));...
+    std(Offset_resp_houses) / sqrt(length(Offset_resp_houses))];
 
-er = errorbar(1:2, [mean(Ttp_faces); mean(Ttp_houses)], stderr);
+er = errorbar(1:2, [mean(Offset_resp_faces); mean(Offset_resp_houses)], stderr);
 er.Color = [0,0,0];
 er.LineStyle = "none";
 er.LineWidth = 1;
@@ -149,4 +149,47 @@ saveplots(saveDir, "Temporal_Dynamics", "Time_to_Peak", file_name, true)
 close all
 
 %% Response at Stimulus offset
-epochs_acrossSubs = get_StimOffset_Resp(epochs_acrossSubs);
+epochs_acrossSubs = get_StimOffset_Resp(epochs_acrossSubs, true);
+
+%% Plot Time to peak bar plot
+% make a barplot
+Offset_resp_faces = [epochs_acrossSubs.StimOffset_resp_faces];
+Offset_resp_houses = [epochs_acrossSubs.StimOffset_resp_houses];
+
+f = figure(); hold on;
+c = bar([mean(Offset_resp_faces), mean(Offset_resp_houses)]);
+
+% plot(1, ecc_l, "ok")
+a = swarmchart(ones(1, size(Offset_resp_faces, 2)), Offset_resp_faces, "filled", "MarkerFaceAlpha",0.5);
+b = swarmchart(2*ones(1, size(Offset_resp_houses,2)), Offset_resp_houses, "filled", "MarkerFaceAlpha",0.5);
+
+a.XJitterWidth = 0.3;
+b.XJitterWidth = 0.3;
+
+%calculate and plot error bars (std error of the mean)
+stderr = [std(Offset_resp_faces / sqrt(length(Offset_resp_faces)));...
+    std(Offset_resp_houses) / sqrt(length(Offset_resp_houses))];
+
+er = errorbar(1:2, [mean(Offset_resp_faces); mean(Offset_resp_houses)], stderr);
+er.Color = [0,0,0];
+er.LineStyle = "none";
+er.LineWidth = 1;
+title("Response at Stimulus Offset")
+
+%add axes labels
+xlabel("Category Selectivity")
+ylabel("Normalized Response")
+
+%make it pretty
+pubgraph(f, 10, 0.5,"w", false)
+
+xticks(1:2)
+ax = gca;
+ax.XTickLabels = ["Faces"; "Houses"];
+hold off
+
+%% save - barplot
+file_name = "2_Response_StimOffset_Normalized";
+saveplots(saveDir, "Temporal_Dynamics", "Response_StimOffset", file_name, true)
+close all
+
