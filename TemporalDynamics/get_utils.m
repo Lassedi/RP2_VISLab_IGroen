@@ -2,7 +2,6 @@ function get_utils()
 %get to .../matlab_code and add the .../matlab_code to path in order to get
 %access to .../matlab_code/RP2utils for pubgraph
 
-
 [~,x] = fileparts(pwd); %get string of current folder name
 count = 0;
 
@@ -14,7 +13,6 @@ end
 %go back subfolders until you get to matlab_code and again add it to path
 %with its subfolders
 while x ~= "matlab_code"
-        
     [y,~] = fileparts(pwd); %get path excluding current folder
     [~,x] = fileparts(y);
     

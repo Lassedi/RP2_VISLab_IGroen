@@ -3,7 +3,7 @@
 get_utils();
 elect_selectionDir = '/home/lasse/Documents/ECoG_PRF_categories/Plots';
 dataDir = '/home/lasse/Documents/ECoG_PRF_categories/data_A/derivatives/ECoGPreprocessed';
-saveDir = elect_selectionDir;
+
 elect_selection = readtable(fullfile(elect_selectionDir,"1_electSelection_final.xls"));
 
 
@@ -121,32 +121,18 @@ b = swarmchart(2*ones(1, size(Ttp_houses,2)), Ttp_houses, "filled", "MarkerFaceA
 
 a.XJitterWidth = 0.3;
 b.XJitterWidth = 0.3;
-
+%%
 %calculate and plot error bars (std error of the mean)
-stderr = [std(Ttp_faces / sqrt(length(Ttp_faces)));...
-    std(Ttp_houses) / sqrt(length(Ttp_houses))];
-
-er = errorbar(1:2, [mean(Ttp_faces); mean(Ttp_houses)], stderr);
+stderr = [std(Ttp_hous)] ./ sqrt(sumstats.GroupCount);
+er = errorbar(1:2, sumstats.mean_Eccentricity, stderr);
 er.Color = [0,0,0];
 er.LineStyle = "none";
-er.LineWidth = 1;
-title("Time to Peak")
+er.LineWidth = 2;
+title("Eccentricity")
 
-%add axes labels
-xlabel("Category Selectivity")
-ylabel("Time in Seconds")
-
-%make it pretty
 pubgraph(f, 10, 0.5,"w", false)
 
 xticks(1:2)
 ax = gca;
-ax.XTickLabels = ["Faces"; "Houses"];
+ax.XTickLabels = sumstats.Selectivity;
 hold off
-%% save - barplot
-file_name = "1_TimeToPeak";
-saveplots(saveDir, "Temporal_Dynamics", "Time_to_Peak", file_name, true)
-close all
-
-%% Response at Stimulus offset
-epochs_acrossSubs = get_StimOffset_Resp(epochs_acrossSubs);
