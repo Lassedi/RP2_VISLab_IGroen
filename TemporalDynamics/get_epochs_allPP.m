@@ -3,7 +3,7 @@ function epochs_acrossSubs = get_epochs_allPP(elect_selection, dataDir)
 % only CS) and returning a data struct
 
 unique_subs = unique(elect_selection.Participant);
-epochs_acrossSubs = cell(length(unique_subs), 5);
+epochs_acrossSubs = cell(length(unique_subs), 8);
 
 for sub = 1:length(unique_subs)
     %load subjects for which electrodes got selected
@@ -23,8 +23,11 @@ for sub = 1:length(unique_subs)
     epochs_acrossSubs{sub,3} = channels.name(ind);
     epochs_acrossSubs{sub,4} = events(CS_ind,:);
     epochs_acrossSubs{sub,5} = t;
+    epochs_acrossSubs{sub,6} = elect_selection.RFSize(elect_selection.Participant == sub_name)';
+    epochs_acrossSubs{sub,7} = elect_selection.Eccentricity(elect_selection.Participant == sub_name)';
+    epochs_acrossSubs{sub,8} = elect_selection.Selectivity(elect_selection.Participant == sub_name)';
 end
 
 % convert to datastructure 
 epochs_acrossSubs = cell2struct(epochs_acrossSubs, ["Sub", "Data" ...
-    , "Channels", "Events", "Time"], 2);
+    , "Channels", "Events", "Time", "RFSize", "Eccentricity", "Selectivity"], 2);

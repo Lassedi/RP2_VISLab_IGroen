@@ -151,7 +151,7 @@ close all
 %% Response at Stimulus offset
 epochs_acrossSubs = get_StimOffset_Resp(epochs_acrossSubs, true);
 
-%% Plot Time to peak bar plot
+%% Plot Stimulus offset response
 % make a barplot
 Offset_resp_faces = [epochs_acrossSubs.StimOffset_resp_faces];
 Offset_resp_houses = [epochs_acrossSubs.StimOffset_resp_houses];
@@ -193,3 +193,6 @@ file_name = "2_Response_StimOffset_Normalized";
 saveplots(saveDir, "Temporal_Dynamics", "Response_StimOffset", file_name, true)
 close all
 
+%% save datastructure
+
+save(fullfile(dataDir,"processed_final_select_DS.mat"), 'epochs_acrossSubs')
