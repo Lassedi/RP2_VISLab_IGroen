@@ -51,24 +51,37 @@ for run_n = 1:n_run
     disp(size(input_data(ind_numb(1):ind_numb(2))))
     %data = input_data(t>time_win(1) & t<time_win(2),ind_numb(1):ind_numb(2)); 
     % ^this necessary of epochs is passed instead of data2fit
-    data = polymatrix{run_n}*(input_data(ind_numb(1):ind_numb(2))'); %this for data2fit
-    %data = mean(data); % this is necessary if epochs are passed instead of
+    if avg
+        data = polymatrix{run_n}*(input_data(:,ind_numb(1):ind_numb(2))');
+    else
+        data = polymatrix{run_n}*(input_data(ind_numb(1):ind_numb(2))'); %this for data2fit
+    end
+        %data = mean(data); % this is necessary if epochs are passed instead of
     %data2fit
     %disp(size(data))
     %data = reshape(data, [], 1);
     ind_numb = ind_numb + 224;
     
-    plot(data, "LineWidth",1.5)
-    legend_labels{run_n} = sprintf("Run: %i", run_n);
+    
     if avg
+        plot(mean(data, 2)', "LineWidth",1.5)
         legend_labels{run_n} = sprintf("Avg across runs");
+        ax = gca();
+        ax.XLim = [-5, length(mean(data,2))];
+
+
+    else
+        plot(data, "LineWidth",1.5)
+        legend_labels{run_n} = sprintf("Run: %i", run_n);
+        ax = gca();
+        ax.XLim = [-5, length(data)];
+
     end
 end
+
 x_interval = 1:224;
 xticks(x_interval);
 xticklabels(xlabel);
-ax = gca();
-ax.XLim = [-5, length(data)];
 
 
 

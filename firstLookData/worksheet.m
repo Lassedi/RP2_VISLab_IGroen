@@ -1,12 +1,13 @@
 %%
 tbUse ECoG_utils;
+get_utils()
 % Load a dataset - 3Dbrain
 
 %% Note: you will need to update this path to where you copy the data
 dataDir = '~/Documents/ECoG_PRF_categories/data_A';
 
 % Pick a subject
-subject = 'p10';
+subject = 'p02';
 loadName = fullfile(dataDir, 'derivatives','ECoGPreprocessed', sprintf('sub-%s_prfcatdata.mat', subject));
 load(loadName);
 
@@ -18,8 +19,9 @@ bidsEcogPlotElectrodesOnMesh(dataDir, subject, session, 'smry_wang15_mplbl',[], 
 
 %% Find all channels above a certain threshold for all subjects and plot the
 %epoch values
-%close all
-dataDir = '~/Documents/ECoG_PRF_categories/data_A/data_light';
+
+%dataDir = '~/Documents/ECoG_PRF_categories/data_A/data_light';
+dataDir = '/home/lasse/Documents/ECoG_PRF_categories/data_A/derivatives/ECoGPreprocessed';
 %dataDir = fullfile(dataDir, 'derivatives','ECoGPreprocessed', sprintf('sub-%s_prfcatdata.mat', subject));
 thresh = 0;
 %["p01", "p02", "p05", "p06","p07", "p08", "p09",

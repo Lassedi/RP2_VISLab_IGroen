@@ -1,26 +1,28 @@
 %% Helper functions
 tbUse({'ECoG_utils' 'analyzePRF'})
-% load the table containing the namees of electrods which are OS and have
-%pos R2
 
+get_utils()
 %%
 
-prfFitPath = '~/Documents/ECoG_PRF_categories/data/prf_fits/prf_2withNormalization';
+%prfFitPath = '~/Documents/ECoG_PRF_categories/data_A/prf_fits/prf_2withNormalization';
+prfFitPath = '~/Documents/ECoG_PRF_categories/data_A/prf_fits/prf_woNorm_dataA';
 
 %specify subject and load select related data
-subject = "p02";
+subject = "p10";
 load(sprintf("%s/sub-%s_prffits.mat", prfFitPath, subject));
-addpath(genpath('/home/lasse/Documents/ECoG_PRF_categories'))
+dataDir = '/home/lasse/Documents/ECoG_PRF_categories';
 
-load(sprintf('sub-%s_prfcatdata.mat', subject));
+load(fullfile(dataDir, "data_A","derivatives", "ECoGPreprocessed",sprintf('sub-%s_prfcatdata.mat', subject)));
+addpath(genpath(dataDir))
 %elect_prf = readtable("goodPRF_OS_elect.xls");
-elect_prf = readtable("goodPRF_OS_CSt075_PRFt10.xls");
+elect_prf = readtable("1_electSelection_final.xls");
 % Load results & dataOdsf
 %prfFitPath =
 %'~/Documents/ECoG_PRF_categories/matlab_code/temporalECoG/analysis/prfs';
 %^old
 %
-elect = elect_prf(strcmp(elect_prf.Participant,subject),:);
+elect = elect_prf(strcmp(elect_prf.Participant,subject)&...
+    ~strcmp(elect_prf.Selectivity, "LETTERS"),:);
 
 
 %% PLot prf for subject
@@ -62,23 +64,15 @@ for f = 1:length(elect.Electrode)
 end
 saveplots(saveDir, "modelPredTS_indivTrialResp", subject, file_name)
 
-%% Plot model prediction vs AVG ts accross runs
-for el = 1:length(elect.Electrode)    
+%% Plot model prediction TS vs AVG TS accross runs
+for el = 1:length(elect.Electrode) 
+
     % select data for the specific electrode and pRF trials only
     electrode = elect.Electrode{el};
-    elect_pRF_act = epochs(:,:,strcmp(electrodes.name, electrode));
-    el_ind = find(strcmp(electrodes.name, electrode), 1, "first");
-    if subject == "p01"
-        elect_pRF_act = prep_data(convertCharsToStrings(subject), ...
-            '~/Documents/ECoG_PRF_categories/data');
-        events = elect_pRF_act{1}.events;
-        elect_pRF_act = elect_pRF_act{1}.epochs_b(:,:, strcmp( ...
-            electrodes.name, electrode));
-    end
+    el_ind = find(strcmp(results.channels.name, electrode), 1, "first");
     
     %generate model ts and plot data and prediction
-    modelts = generate_modelts(data2fit, stimulus, results, el_ind);
-    plot_ind_trials(elect_pRF_act, events, elect, t, modelts, results, el_ind, true)
+    plot_avg_DtsVSMts(data2fit, stimulus, events, elect, results, el_ind)
 end
 %% Saving plot to directory (Timeseries - AVG)
 saveDir = '/home/lasse/Documents/ECoG_PRF_categories/Plots/';

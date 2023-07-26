@@ -7,11 +7,10 @@ saveDir = elect_selectionDir;
 elect_selection = readtable(fullfile(elect_selectionDir,"1_electSelection_final.xls"));
 
 
-
 %% Getting all epochs for all participants (excluding PRF trial responses - only CS)
 epochs_acrossSubs = get_epochs_allPP(elect_selection, dataDir);
 %% Averaging across participants to get Time response for faces and house selective electrodes
-avg_elect = true;
+avg_elect = false;
 
 if avg_elect
     TR_mean_Ho = zeros(614,1);
@@ -102,7 +101,7 @@ strcmp(epochs_acrossSubs(1).Channels,string(elect_name_h))
 
 
 %% Average Time to Peak per electrode for across trials to corresponding selectivity
-epochs_acrossSubs = get_averageCSTS(epochs_acrossSubs, elect_selection);
+epochs_acrossSubs = get_averageCSTS(epochs_acrossSubs, elect_selection, false); % all_trials false to only use house trials for house selective & vice versa
 
 %% Calculate Time to peak per electrode
 epochs_acrossSubs = get_TtP(epochs_acrossSubs);
@@ -144,8 +143,8 @@ ax = gca;
 ax.XTickLabels = ["Faces"; "Houses"];
 hold off
 %% save - barplot
-file_name = "1_TimeToPeak";
-saveplots(saveDir, "Temporal_Dynamics", "Time_to_Peak", file_name, true)
+file_name = "3_TimeToPeak_05TimWin";
+saveplots(saveDir, "Temporal_Dynamics", "Time_to_Peak", file_name, 800)
 close all
 
 %% Response at Stimulus offset
@@ -189,10 +188,10 @@ ax.XTickLabels = ["Faces"; "Houses"];
 hold off
 
 %% save - barplot
-file_name = "2_Response_StimOffset_Normalized";
+file_name = "3_Response_StimOffset_Normalized_allTrials";
 saveplots(saveDir, "Temporal_Dynamics", "Response_StimOffset", file_name, true)
 close all
 
 %% save datastructure
 
-save(fullfile(dataDir,"epochs_acrossSubs"),"-struct", "epochs_acrossSubs")
+save(fullfile(dataDir,"processed_final_select_DS_allTrials.mat"), 'epochs_acrossSubs')

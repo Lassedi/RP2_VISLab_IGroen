@@ -5,7 +5,7 @@ dataDir = '~/Documents/ECoG_PRF_categories/data_A';
 % '~/Documents/ECoG_PRF_categories/matlab_code/temporalECoG/analysis/prfs';
 % ^old
 %prfFitPath = '/home/lasse/Documents/ECoG_PRF_categories/data/prf_fits/prf_woNorm_datalight';
-prfFitPath = '/home/lasse/Documents/ECoG_PRF_categories/data/prf_fits/prf_woNorm_dataA';
+prfFitPath = '/home/lasse/Documents/ECoG_PRF_categories/data_A/prf_fits/prf_woNorm_dataA';
 
 addpath(genpath('/home/lasse/Documents/ECoG_PRF_categories/matlab_code'))
 %% create subject list to loop over

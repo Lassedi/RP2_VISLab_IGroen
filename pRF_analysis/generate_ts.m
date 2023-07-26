@@ -1,4 +1,4 @@
-function modelts = generate_modelts(data, stimulus, results, el)
+function [datats,modelts] = generate_ts(data, stimulus, results, el)
 
 % Plot PRF timecourses data and fits
 % Using example code from Kendrick Kays website

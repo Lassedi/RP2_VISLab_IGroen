@@ -4,6 +4,9 @@ function pubgraph(fh,FS,LW,CL,xax)
 %FS is the Font Size 
 %LW is the Line Width
 %CL is Color
+%xax whether the x-axis should get processed. Only if x-axis consists of
+%numbers not when x-axis is labeled with strings
+
 figure(fh)                                         	%pull the figure forwards
 axs = findall(fh, 'Type', 'axes');                 	%get the axes on the figure
 set(axs, 'FontSize', FS, 'LineWidth', LW,'Color',CL)%make everything on the axis correct

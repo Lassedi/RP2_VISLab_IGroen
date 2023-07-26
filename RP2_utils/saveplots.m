@@ -1,8 +1,9 @@
 function saveplots(saveDir, folder_name, subject, file_name, HD)
 %saves plots when provided with a savedirectory & folder name for the plots
 % make another directory for the specific subjecct - filname should be cell
-% array (1*x dim) with x many filenames as there are plots - HD = true, saves
-% figures as very high resolution images - takes a bit longer
+% array (1*x dim) with x many filenames as there are plots - HD = int (eg:
+% for big screen & 800 for small), saves figures as very high resolution 
+% images - takes a bit longer
 if ~isfolder(fullfile(saveDir, folder_name))
     mkdir(fullfile(saveDir, folder_name));
     saveDir = fullfile(saveDir, folder_name);
@@ -21,9 +22,10 @@ fig_count = length(findobj("type", "figure"));
 
 for f = 1:fig_count    
     set(f, "Name", file_name{f})
-    if HD
+    if exist("HD","var")
+        
         print(f, fullfile(saveDir, sprintf("%s.png",file_name{f})) ...
-            , "-dpng", "-r1000")
+            , "-dpng", sprintf("-r%i",HD))
     else 
         set(f, 'Position', get(0,'screensize'))
         saveas(f, fullfile(saveDir, file_name{f}), "png")

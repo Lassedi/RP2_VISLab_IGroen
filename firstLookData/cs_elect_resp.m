@@ -39,21 +39,15 @@ else
     chan_ind = array2table((1:size(channels,1))');
     chan_ind{:, "subject"} = {subject};
 end
-%%
-% Prepare the plot
 
-figure("Visible","on");hold on;
 
-%count loop iterations
-counter = 1;
 
-% Loop over channels, plot one channel per subplot
+% Loop over channels, get TS per category per electrode
+TS_matrix_h = [];
+TS_matrix_f = [];
+
 for cc = 1:height(chan_ind)
     
-    if counter > 4
-        counter = 1;
-        figure("Visible","on");hold on;
-    end
     chan = table2array(chan_ind(cc,1)); 
     trial_ind1 = contains(events.trial_name, ['BUILDINGS', "HOUSES"]);
     trial_ind2 = contains(events.trial_name, 'FACE');
@@ -62,37 +56,11 @@ for cc = 1:height(chan_ind)
     build_dist = epochs(:,trial_ind1,chan);
     face_dist = epochs(:,trial_ind2,chan);
 
-    subplot(2,2,counter); hold on
-    plot(t,mean(build_dist,2), 'LineWidth', 2)
-    plot(t,mean(face_dist,2),'LineWidth', 2)
-    %plot(t,mean(epochs(:,trial_ind3,chan),2),'LineWidth', 2)
-    
-    if CI
-    % create bootstrap replicates of category distributions
-    bs_build_dist = bootstrp(1000, @mean, build_dist');
-    bs_face_dist = bootstrp(1000, @mean, face_dist');
-
-    CI_build_dist = prctile(bs_build_dist, [2.5 97.5], 1);
-    CI_face_dist = prctile(bs_face_dist, [2.5 97.5], 1);
-
-    CI_build_dist = [CI_build_dist(2,:), fliplr(CI_build_dist(1,:))];
-    CI_face_dist = [CI_face_dist(2,:), fliplr(CI_face_dist(1,:))];
-
-    % plot CI
-    b = fill([t; flipud(t)]',CI_build_dist, "blue");
-    b.FaceAlpha = 0.4;
-    b.EdgeColor = "none";
-
-    h = fill([t; flipud(t)]',CI_face_dist(1,:), "red");
-    h.FaceAlpha = 0.4;
-    h.EdgeColor = "none";
-    end
-
-    if counter == 1
-        legend('HOUSE', 'FACE');%, 'LETTER');
-    end
-    title(sprintf('%s %s',channels.name{chan}, subject));
-    axis tight
-    counter = counter + 1;
+    TS_matrix_h = cat(3,TS_matrix_h, build_dist);
+    TS_matrix_f = cat(3,TS_matrix_f, face_dist);
 end
+TS_matrix = cat(4, TS_matrix_h, TS_matrix_f);
+
+% plot the TS
+plot_CatTS(TS_matrix, chan_ind, t, channels, subject, true, true)
 end

@@ -8,7 +8,7 @@ for sub = 1:length([epochs_acrossSubs.Sub])
     ts_list = epochs_acrossSubs(sub).Face_Selective;
 
     % restrict time window
-    time_ind = epochs_acrossSubs(sub).Time > 0 & epochs_acrossSubs(sub).Time < 0.4;
+    time_ind = epochs_acrossSubs(sub).Time > 0 & epochs_acrossSubs(sub).Time < 0.5;
 
     %get max values per ts
     max_ts = max(ts_list(time_ind,:));

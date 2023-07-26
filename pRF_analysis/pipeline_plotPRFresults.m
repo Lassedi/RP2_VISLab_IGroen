@@ -1,9 +1,10 @@
-tbUse({'ECoG_utils' 'analyzePRF'});
+tbUse({'ECoG_utils' 'analyzePRF'})
 %%
 %prfFitPath = '~/Documents/ECoG_PRF_categories/matlab_code/temporalECoG/analysis/prfs';
+%prfFitPath = '~/Documents/ECoG_PRF_categories/data/prf_fits/prf_2withNormalization';
 %^old 
-prfFitPath = '~/Documents/ECoG_PRF_categories/data/prf_fits/prf_2withNormalization';
-dataDir = '~/Documents/ECoG_PRF_categories/data';
+prfFitPath = '~/Documents/ECoG_PRF_categories/data_A/prf_fits/prf_woNorm_dataA';
+dataDir = '~/Documents/ECoG_PRF_categories/data_A';
 addpath(prfFitPath)
 %
 subject = "p02";

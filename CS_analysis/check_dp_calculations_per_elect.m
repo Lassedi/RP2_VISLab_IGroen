@@ -64,6 +64,7 @@ d_prime_tbl.Properties.VariableNames = col_names;
 el = "Oc19";
 el_epochs = epochs(:,:,strcmp(channels.name, el));
 
+
 means_trials_f = mean(el_epochs(t>0&t<0.85,strcmp(events.trial_name, stim(1))));
 means_trials_h = mean(el_epochs(t>0&t<0.85,strcmp(events.trial_name, stim(2))));
 
@@ -73,8 +74,8 @@ end
 
 
 vis_check_dp_trial_means_dist(means_trials_f, means_trials_h, el);
-fig_names = [fig_names,{sprintf("%s_midtermHD", get(gcf,"Name"))}];
-%% save plots
+fig_names = [fig_names,{sprintf("%s_finalHD", get(gcf,"Name"))}];
+%% save plots (!!! clear fignames before saving if more than one figure was tested)
 saveDir = '/home/lasse/Documents/ECoG_PRF_categories/Plots';
 saveplots(saveDir, "trialMeansDist_check", subject, fig_names, true);
 clear fig_names

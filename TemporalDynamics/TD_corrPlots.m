@@ -3,7 +3,7 @@ get_utils()
 dataDir = '/home/lasse/Documents/ECoG_PRF_categories/data_A/derivatives/ECoGPreprocessed';
 saveDir = '/home/lasse/Documents/ECoG_PRF_categories/Plots';
 
-load(fullfile(dataDir, "processed_final_select_DS.mat"))
+load(fullfile(dataDir, "processed_final_select_DS_allTrials.mat"))
 %% Create the variables
 selInd = [epochs_acrossSubs.Selectivity]';
 
@@ -48,7 +48,7 @@ pubgraph(a, 10, 0.5,"w", true)
 hold off;
 
 %% save plots 
-fig_names = ["Ttp_Ecc", "Ttp_RFS", "StimOffResp_Ecc", "StimOffResp_RFS"];
+fig_names = ["Ttp_Ecc_AT", "Ttp_RFS_At", "StimOffResp_Ecc_AT", "StimOffResp_RFS_AT"];
 saveplots(saveDir, "Temporal_Dynamics", "CorrelationPlots", fig_names, true)
 
 close all
