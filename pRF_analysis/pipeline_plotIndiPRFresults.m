@@ -2,20 +2,20 @@
 tbUse({'ECoG_utils' 'analyzePRF'})
 
 get_utils()
-%%
+%
 
 %prfFitPath = '~/Documents/ECoG_PRF_categories/data_A/prf_fits/prf_2withNormalization';
 prfFitPath = '~/Documents/ECoG_PRF_categories/data_A/prf_fits/prf_woNorm_dataA';
 
-%specify subject and load select related data
-subject = "p10";
+%% specify subject and load select related data
+subject = "p02";
 load(sprintf("%s/sub-%s_prffits.mat", prfFitPath, subject));
 dataDir = '/home/lasse/Documents/ECoG_PRF_categories';
 
 load(fullfile(dataDir, "data_A","derivatives", "ECoGPreprocessed",sprintf('sub-%s_prfcatdata.mat', subject)));
 addpath(genpath(dataDir))
 %elect_prf = readtable("goodPRF_OS_elect.xls");
-elect_prf = readtable("1_electSelection_final.xls");
+elect_prf = readtable("2_electSelection_final.xls");
 % Load results & dataOdsf
 %prfFitPath =
 %'~/Documents/ECoG_PRF_categories/matlab_code/temporalECoG/analysis/prfs';
@@ -26,15 +26,15 @@ elect = elect_prf(strcmp(elect_prf.Participant,subject)&...
 
 
 %% PLot prf for subject
-RP2ecog_plotPRFs(results, stimulus, channels, [], 1, elect)
+RP2ecog_plotPRFs(results, stimulus, channels, [], 1, elect(4,:))
 %% Saving plot to drectory (PRF)
 saveDir = '/home/lasse/Documents/ECoG_PRF_categories/Plots/';
 
-file_name = {zeros(length(elect.Electrode), 1)};
-for f = 1:length(elect.Electrode)
-    file_name{f} = sprintf("%s_modelPredPRF", elect.Electrode{f});
+file_name = {zeros(length(elect.Electrode(4,:)), 1)};
+for f = 1:length(elect.Electrode(4,:))
+    file_name{f} = sprintf("%s_modelPredPRF", elect.Electrode{4});
 end
-saveplots(saveDir, "modelPredPRF_2", subject, file_name)
+saveplots(saveDir, "Report", "Part1_Hypothesis", "1_"+file_name, 1000)
 close all
 %% Plot individual trials including blanks and the corresponding model prediction (TimeSeries)
 for el = 1:length(elect.Electrode)    

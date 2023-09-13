@@ -1,6 +1,7 @@
-function get_utils()
+function [saveDir] = get_utils()
 %get to .../matlab_code and add the .../matlab_code to path in order to get
 %access to .../matlab_code/RP2utils for pubgraph
+saveDir = '/home/lasse/Documents/ECoG_PRF_categories/Plots/';
 
 [~,x] = fileparts(pwd); %get string of current folder name
 count = 0;

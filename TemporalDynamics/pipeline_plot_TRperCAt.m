@@ -8,6 +8,7 @@ saveDir = elect_selectionDir;
 %% get data
 data_allPP = get_epochs_allPP(elect_selection, dataDir);
 
+
 % Average Time to Peak per electrode for across trials to corresponding selectivity
 data_allPP = get_averageCSTS(data_allPP, elect_selection, true);
 
@@ -26,7 +27,7 @@ h = [data_allPP.House_Selective]';
 f = [data_allPP.Face_Selective]';
 t = data_allPP(1).Time;
 
-%% divide each row by max value within timepoint above 0 and below 0.4
+% divide each row by max value within timepoint above 0 and below 0.4
 h = h./max(h(:,t>0&t<0.5),[],2);
 f = f./max(f(:,t>0&t<0.5),[],2);
 

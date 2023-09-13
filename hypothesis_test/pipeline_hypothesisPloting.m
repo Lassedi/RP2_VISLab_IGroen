@@ -1,8 +1,17 @@
 %load electrode table
 get_utils()
+
+
 dataDir = '/home/lasse/Documents/ECoG_PRF_categories/Plots/';
-elect_table_ori = readtable(fullfile(dataDir,"1_electSelection_final.xls"));
-loc_table = readtable(fullfile(dataDir, "1_locations_final_electrode_selection.xls"));
+
+elect_table_ori = readtable(fullfile(dataDir,"2_electSelection_final.xls")); %2_electSelection_final.xls = mean(ecc & size & ang); 
+% results struct has 2 values for each parameter (2fits because of xval) in this electrode selection it is the mean of both values 
+% - 1st version only uses the first value of the first fit; the change does
+% not seem to change much
+
+loc_table = readtable(fullfile(dataDir, "1_locations_final_electrode_selection.xls")); % no location table for the second electSelection yet 
+% - to control if the pattern changes if EVC is excluded
+
 saveDir = dataDir;
 %% calculate sumary stats per group 
 

@@ -52,8 +52,7 @@ for f = 1:length(f_ind)
     end
 
     figure(Visible="on"); hold on
-
-    
+  
     plotDim1 = round(sqrt(nChans)); plotDim2 = ceil((nChans)/plotDim1);
     %tiledlayout(plotDim1, plotDim2, 'TileSpacing','compact'); % Matlab 2019B
     for ii = 1:nChans
@@ -84,7 +83,10 @@ for f = 1:length(f_ind)
         %[th, r] = cart2pol(xx, yy);
         p = results.params(1,:,el);
         im = makegaussian2d(drawRes,p(1)+stimRes,p(2)+stimRes,p(3)/sqrt(p(5)),p(3)/sqrt(p(5))); 
+        
 
+       
+    
         % plot pRF
         imagesc(im);hold on
         if colorOpt == 1
@@ -92,7 +94,7 @@ for f = 1:length(f_ind)
         else
             colormap(1-gray)
         end
-
+        
         % draw stimulus
         h1 = k_drawellipse(centerPix,centerPix,0,drawRes/6,drawRes/6); % circle indicating stimulus extent
         set(h1,'Color',[0 0 0],'LineWidth',1, 'LineStyle', ':');
@@ -103,7 +105,9 @@ for f = 1:length(f_ind)
             set(h2,'Color',[1 1 1]);
             set(h3,'Color',[1 1 1]);
         end
+
         % plot pRF center and sd  
+        
         h1 = k_drawellipse(p(2)+stimRes,p(1)+stimRes,0,sd,sd);      % 
         h2 = k_drawellipse(p(2)+stimRes,p(1)+stimRes,0,2*sd,2*sd);  % 
         set(h1,'Color', [0 0 0],'LineWidth',2,'LineStyle', '-');
