@@ -20,6 +20,7 @@ data_allPP = get_epochs_allPP(elect_selection, dataDir);
 %% log mean weights of selected electrodes
 meanWeights = zeros(2,55);
 count = 0;
+overall_results = [];
 
 % select timeseries of a single electrode 
 for pp = 1:size(data_allPP,1)
@@ -98,6 +99,9 @@ for pp = 1:size(data_allPP,1)
                 results = [results; [rsq, params, pred, {pnames}]];
             end
             
+            % append results
+            overall_results = [overall_results;results];
+            
             % save mean weights of house & face trials for electrode 
             MeanWeight = [results{:,2}];
             MeanWeight = mean(MeanWeight(1,:));
@@ -108,6 +112,25 @@ for pp = 1:size(data_allPP,1)
         meanWeights(:,count) = meanWeightsElect;
     end
 end
+%% make weight parameter distribution table
+%make Index for face and house trials
+facesTrialsInd = logical(repmat([1,0],[1,55])');
+housestrialsInd = ~facesTrialsInd; 
+
+%make index for face and house selective electrodes
+faSelectiveInd = strcmp([data_allPP.Selectivity], "FACES");
+hoSelectiveInd = ~faSelectiveInd;
+
+%use both index to create a structure saving weight parameter distributions
+faParameterTable = [overall_results{facesTrialsInd, 2}];
+hoParameterTable = [overall_results{housestrialsInd, 2}];
+
+weight.faSel_FaTrials = faParameterTable(1,faSelectiveInd);
+weight.faSel_HoTrials = hoParameterTable(1,faSelectiveInd);
+weight.hoSel_FaTrials = faParameterTable(1,hoSelectiveInd);
+weight.hoSel_HoTRials = hoParameterTable(1,hoSelectiveInd);
+
+
 
 %% Plot barplot
 % make trial type index
@@ -120,10 +143,35 @@ faceSelectElect = meanWeights(:,face_ind);
 houseSelectElect = meanWeights(:,house_ind);
 
 % make barplots
-figure(); hold on;
+f = figure(); hold on;
 
-bar([1,2], [mean(faceSelectElect(1,:)), mean(faceSelectElect(2,:))])
-bar([3,4], [mean(houseSelectElect(1,:)), mean(houseSelectElect(2,:))])
+b1 = bar([1,2], [mean(faceSelectElect(1,:)), mean(faceSelectElect(2,:))]);
+b2 = bar([3,4], [mean(houseSelectElect(1,:)), mean(houseSelectElect(2,:))]);
+
+c1 = [0 0.4470 0.7410];
+
+s1 = swarmchart(ones(size(weight.faSel_FaTrials,2)), weight.faSel_FaTrials, ...
+    [], c1, "filled", "MarkerFaceAlpha",0.5);
+s2 = swarmchart(2*ones(size(weight.faSel_HoTrials,2)), weight.faSel_HoTrials, ...
+    [], c1, "filled", "MarkerFaceAlpha",0.5);
+s3 = swarmchart(3*ones(size(weight.hoSel_FaTrials,2)), weight.hoSel_FaTrials, ...
+    "filled", "MarkerFaceAlpha",0.5);
+s4 = swarmchart(4*ones(size(weight.hoSel_HoTRials,2)), weight.hoSel_HoTRials, ...
+    "filled", "MarkerFaceAlpha",0.5);
+
+% standard error
+plot_std_error(weight)
+
+% adjust graph
+b1.FaceColor = "flat";
+b1.FaceAlpha = 0.7;
+b2.FaceColor = "flat";
+b2.FaceAlpha = 0.7;
+
+[s1.XJitterWidth] = deal(0.3);
+[s2.XJitterWidth] = deal(0.3);
+[s3.XJitterWidth] = deal(0.3);
+[s4.XJitterWidth] = deal(0.3);
 
 % label axis
 xticks([1,2,3,4]);
@@ -132,6 +180,14 @@ xticklabels(["Face-Trial", "House-Trial", "Face-Trial", "House-Trial"])
 legend(["Face-Selective", "House-Selective"])
 
 title("Mean Transient Channel Weight per Trial-Type and Selectivity")
+
+%make it pretty
+pubgraph(f, 10, 0.5, "w", false)
+
+%% save - barplot
+file_name = "1_BarMeanWeightTrans_FaHoSplit_HD_2";
+saveplots(saveDir, "Temporal_Dynamics", "TempModels_TTC19", file_name, 1000)
+close all
 
 %% PLOT model and prediction
 %load("2_TTCSTIG19_faceFit_fit4individualElect.mat") %!!!! comment out when

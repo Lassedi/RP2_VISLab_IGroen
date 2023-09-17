@@ -14,7 +14,7 @@ elect_selection = readtable(fullfile(elect_selectionDir,"1_electSelection_final.
 dataDir = '/home/lasse/Documents/ECoG_PRF_categories/data_A/derivatives/ECoGPreprocessed';
 saveDir = elect_selectionDir;
 
-% get data
+%% get data
 data_allPP = get_epochs_allPP(elect_selection, dataDir);
 
 
@@ -74,7 +74,7 @@ for elect=1:size(data,2)
 end
 
 %% PLOT model and prediction
-%load("2_TTCSTIG19_faceFit_fit4individualElect.mat") %!!!! comment out when
+%load("TempFits/3_TTCSTIG19_houseFit_fit4individualElect.mat") %!!!! comment out when
 %plotting new fit
 
 
@@ -108,20 +108,47 @@ legend({'stimulus', 'data', func2str(objFunction)});
 
 %% save params
 
+save("3_TTCSTIG19_houseFit_fit4individualElect.mat", "data", "results", "t", "stim", "objFunction")
+
+
+%% plot bar plot - get the data
+load("TempFits/3_TTCSTIG19_houseFit_fit4individualElect.mat") % load face or house fit
 parameter_table = [results{:,2}];
-mean_weight = mean(parameter_table(1,:)); % take the mean of the transient channel weight for each electrode
-save("3_TTCSTIG19_houseFit_fit4individualElect.mat", "data", "results", "t", "stim", "objFunction", "mean_weight")
 
+% Make structure containing parameter distributions for face and house fit
+%weight.Faces = parameter_table(1,:); % take the array of weights for the transient channel for each electrode
+weight.Houses = parameter_table(1,:);
+%% make the bar plot
+f = figure(); hold on;
 
-%% plot bar plot
+face_mean = mean(weight.Faces);
+house_mean = mean(weight.Houses);
 
-figure(); hold on;
+b = bar([1,2], [face_mean, house_mean]);
+s1 = swarmchart(ones(size(weight.Faces,2)), weight.Faces, "filled", "MarkerFaceAlpha",0.5);
+s2 = swarmchart(2*ones(size(weight.Houses,2)), weight.Houses, "filled", "MarkerFaceAlpha",0.5);
 
-bar([1,2], [face_mean, house_mean])
+[s1.XJitterWidth] = deal(0.3);
+[s2.XJitterWidth] = deal(0.3);
+
+%standarderror
+plot_std_error(weight)
+
+b.FaceColor = "flat";
+b.FaceAlpha = 0.7;
 
 xticks([1,2])
 xticklabels(["Faces", "Houses"])
 title("Mean Weight on Transient Channel")
+
+%make it pretty
+pubgraph(f, 10, 0.5, "w", false)
+
+%% save - barplot
+file_name = "1_BarMeanWeightTrans_HD";
+saveplots(saveDir, "Temporal_Dynamics", "TempModels_TTC19", file_name, 1000)
+close all
+
 %% Next steps:
 % 1. Decide what we want to fit the model on (face/house trials or pRF
 % trials?)
